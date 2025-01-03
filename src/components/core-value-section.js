@@ -68,7 +68,6 @@ class CoreValueSection extends LitElement {
       background-color: #000;
     }
 
-    /* Rest of the styles remain unchanged */
     .pillars {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -187,7 +186,6 @@ class CoreValueSection extends LitElement {
             </linearGradient>
           </defs>
           <rect width="100%" height="100%" fill="url(#cityGradient)"/>
-          <!-- Simplified city skyline -->
           <path d="M0 300 L50 300 L50 250 L100 250 L100 300 L150 300 L150 200 L200 200 L200 300 L250 300 L250 150 L300 150 L300 300 L350 300 L350 250 L400 250 L400 300 L450 300 L450 200 L500 200 L500 300 L550 300 L550 250 L600 250 L600 300 L650 300 L650 150 L700 150 L700 300 L750 300 L750 200 L800 200 L800 300 L850 300 L850 250 L900 250 L900 300 L950 300 L950 200 L1000 200 L1000 400 L0 400 Z" 
                 fill="#1a1a1a"/>
         </svg>
@@ -198,7 +196,6 @@ class CoreValueSection extends LitElement {
       </div>
 
       <div class="pillars">
-        <!-- Pillars content remains unchanged -->
         ${this.renderPillars()}
       </div>
 
@@ -224,14 +221,12 @@ class CoreValueSection extends LitElement {
       </div>
 
       <div class="capabilities">
-        <!-- Capabilities content remains unchanged -->
         ${this.renderCapabilities()}
       </div>
     `;
   }
 
   renderPillars() {
-    // Original pillars content
     return html`
       <div class="pillar">
         <h4 class="pillar-title">Continuous Innovation in Technology</h4>
@@ -261,7 +256,6 @@ class CoreValueSection extends LitElement {
   }
 
   renderCapabilities() {
-    // Original capabilities content
     return html`
       <div class="capability">
         <h4 class="capability-title">Database application</h4>

@@ -6,6 +6,7 @@ import './components/banner-section.js';
 import './components/management-words.js';
 import './components/history-section.js';
 import './components/core-value-section.js';
+import './components/footer-section.js';
 
 class CompanyPage extends LitElement {
   static properties = {
@@ -21,13 +22,6 @@ class CompanyPage extends LitElement {
     :host {
       display: block;
       font-family: Arial, sans-serif;
-    }
-
-    .footer {
-      background: #333;
-      color: white;
-      padding: 20px;
-      text-align: center;
     }
   `;
 
@@ -54,7 +48,7 @@ class CompanyPage extends LitElement {
       
       <core-value-section></core-value-section>
 
-      <div class="footer">Footer</div>
+      <footer-section></footer-section>
     `;
   }
 }

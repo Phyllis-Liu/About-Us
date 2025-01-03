@@ -3,7 +3,8 @@ import { LitElement, html, css } from 'lit';
 class HeaderNav extends LitElement {
   static properties = {
     isDropdownOpen: { type: Boolean },
-    selectedLanguage: { type: String }
+    selectedLanguage: { type: String },
+    isScrolled: { type: Boolean }
   };
 
   constructor() {
@@ -11,13 +12,36 @@ class HeaderNav extends LitElement {
     this.isDropdownOpen = false;
     this.selectedLanguage = 'EN';
     this.languages = ['EN', 'TW', 'JP', 'ES', 'DE', 'FR'];
+    this.isScrolled = false;
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    window.addEventListener('scroll', () => {
+      this.isScrolled = window.scrollY > 50;
+    });
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    window.removeEventListener('scroll', () => {
+      this.isScrolled = window.scrollY > 50;
+    });
   }
 
   static styles = css`
     :host {
       display: block;
-      background-color: #000;
-      padding: 1rem 2rem;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      transition: background-color 0.3s ease;
+    }
+
+    :host([scrolled]) {
+      background-color: rgba(0, 0, 0, 0.9);
     }
 
     .header-container {
@@ -26,6 +50,7 @@ class HeaderNav extends LitElement {
       align-items: center;
       max-width: 1200px;
       margin: 0 auto;
+      padding: 1rem 2rem;
     }
 
     .logo {
@@ -96,7 +121,7 @@ class HeaderNav extends LitElement {
       position: absolute;
       top: 100%;
       right: 0;
-      background-color: #fff;
+      background-color: rgba(0, 0, 0, 0.9);
       min-width: 100px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.2);
       border-radius: 4px;
@@ -109,7 +134,7 @@ class HeaderNav extends LitElement {
     }
 
     .dropdown-item {
-      color: #000;
+      color: #fff;
       padding: 8px 12px;
       text-decoration: none;
       display: block;
@@ -118,7 +143,7 @@ class HeaderNav extends LitElement {
     }
 
     .dropdown-item:hover {
-      background-color: #f0f0f0;
+      background-color: rgba(255, 255, 255, 0.1);
     }
   `;
 
@@ -167,6 +192,16 @@ class HeaderNav extends LitElement {
         </div>
       </div>
     `;
+  }
+
+  updated(changedProperties) {
+    if (changedProperties.has('isScrolled')) {
+      if (this.isScrolled) {
+        this.setAttribute('scrolled', '');
+      } else {
+        this.removeAttribute('scrolled');
+      }
+    }
   }
 }
 
