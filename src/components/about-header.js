@@ -51,13 +51,14 @@ class AboutHeader extends LitElement {
       cursor: pointer;
       font-weight: bold;
       padding: 8px 16px;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
       position: relative;
       color: #666;
       text-align: center;
       border: none;
       background: none;
       font-size: 16px;
+      will-change: transform, color;
     }
 
     .nav-item:nth-child(1) {
@@ -72,12 +73,7 @@ class AboutHeader extends LitElement {
       grid-column: 6;
     }
 
-    /* ABOUT 按鈕的基本樣式 */
-    .nav-item[data-tab="about"] {
-      color: #666;
-    }
-
-    .nav-item[data-tab="about"]::after {
+    .nav-item::after {
       content: '';
       position: absolute;
       bottom: -5px;
@@ -85,89 +81,85 @@ class AboutHeader extends LitElement {
       width: 100%;
       height: 2px;
       background-color: transparent;
-      transition: all 0.3s ease;
+      transition: background-color 0.2s ease;
+      will-change: background-color;
     }
 
-    /* ABOUT 按鈕的懸停效果 */
-    .nav-item[data-tab="about"]:hover {
+    .nav-item:hover {
       color: #B32F23;
     }
 
-    .nav-item[data-tab="about"]:hover::after {
+    .nav-item:hover::after {
       background-color: #B32F23;
     }
 
-    /* HISTORY 和 CORE VALUE 按鈕的樣式 */
-    .nav-item[data-tab="history"],
-    .nav-item[data-tab="core-value"] {
-      color: #666;
-    }
-
-    .nav-item[data-tab="history"]::after,
-    .nav-item[data-tab="core-value"]::after {
-      content: '';
-      position: absolute;
-      bottom: -5px;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background-color: transparent;
-      transition: all 0.3s ease;
-    }
-
-    .nav-item[data-tab="history"]:hover,
-    .nav-item[data-tab="core-value"]:hover {
-      color: #B32F23;
-    }
-
-    .nav-item[data-tab="history"]:hover::after,
-    .nav-item[data-tab="core-value"]:hover::after {
-      background-color: #B32F23;
-    }
-
-    .nav-item[data-tab="history"].active,
-    .nav-item[data-tab="core-value"].active {
-      color: #000;
-    }
-
-    .nav-item[data-tab="history"].active::after,
-    .nav-item[data-tab="core-value"].active::after {
-      background-color: #000;
-    }
-
-    @keyframes heartBeat {
-      0% {
-        transform: scale(1);
+    @keyframes jello {
+      from,
+      11.1%,
+      to {
+        transform: translate3d(0, 0, 0);
       }
-      14% {
-        transform: scale(1.1);
+
+      22.2% {
+        transform: skewX(-12.5deg) skewY(-12.5deg);
       }
-      28% {
-        transform: scale(1);
+
+      33.3% {
+        transform: skewX(6.25deg) skewY(6.25deg);
       }
-      42% {
-        transform: scale(1.1);
+
+      44.4% {
+        transform: skewX(-3.125deg) skewY(-3.125deg);
       }
-      70% {
-        transform: scale(1);
+
+      55.5% {
+        transform: skewX(1.5625deg) skewY(1.5625deg);
+      }
+
+      66.6% {
+        transform: skewX(-0.78125deg) skewY(-0.78125deg);
+      }
+
+      77.7% {
+        transform: skewX(0.390625deg) skewY(0.390625deg);
+      }
+
+      88.8% {
+        transform: skewX(-0.1953125deg) skewY(-0.1953125deg);
       }
     }
 
-    .heartbeat {
-      animation: heartBeat 1s ease-in-out;
+    .jello {
+      animation: jello 0.8s cubic-bezier(0.215, 0.61, 0.355, 1);
+      transform-origin: center;
+      backface-visibility: hidden;
+      perspective: 1000px;
+      transform: translateZ(0);
     }
   `;
 
   setActiveTab(tab) {
-    const buttons = this.shadowRoot.querySelectorAll('.nav-item');
-    buttons.forEach(button => button.classList.remove('heartbeat'));
-
     const clickedButton = this.shadowRoot.querySelector(`.nav-item[data-tab="${tab}"]`);
     if (clickedButton) {
-      clickedButton.classList.add('heartbeat');
-      setTimeout(() => {
-        clickedButton.classList.remove('heartbeat');
-      }, 1000);
+      // 使用 Web Animations API 來實現更高效的動畫
+      clickedButton.animate(
+        [
+          { transform: 'translate3d(0, 0, 0)' },
+          { transform: 'skewX(-12.5deg) skewY(-12.5deg)', offset: 0.222 },
+          { transform: 'skewX(6.25deg) skewY(6.25deg)', offset: 0.333 },
+          { transform: 'skewX(-3.125deg) skewY(-3.125deg)', offset: 0.444 },
+          { transform: 'skewX(1.5625deg) skewY(1.5625deg)', offset: 0.555 },
+          { transform: 'skewX(-0.78125deg) skewY(-0.78125deg)', offset: 0.666 },
+          { transform: 'skewX(0.390625deg) skewY(0.390625deg)', offset: 0.777 },
+          { transform: 'skewX(-0.1953125deg) skewY(-0.1953125deg)', offset: 0.888 },
+          { transform: 'translate3d(0, 0, 0)' }
+        ],
+        {
+          duration: 800,
+          easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)',
+          fill: 'forwards'
+        }
+      );
     }
 
     this.activeTab = tab;
@@ -188,17 +180,17 @@ class AboutHeader extends LitElement {
       <div class="nav-container">
         <div class="nav">
           <button 
-            class="nav-item ${this.activeTab === 'about' ? 'active' : ''}"
+            class="nav-item"
             @click="${() => this.setActiveTab('about')}"
             data-tab="about"
           >ABOUT</button>
           <button 
-            class="nav-item ${this.activeTab === 'history' ? 'active' : ''}"
+            class="nav-item"
             @click="${() => this.setActiveTab('history')}"
             data-tab="history"
           >HISTORY</button>
           <button 
-            class="nav-item ${this.activeTab === 'core-value' ? 'active' : ''}"
+            class="nav-item"
             @click="${() => this.setActiveTab('core-value')}"
             data-tab="core-value"
           >CORE VALUE</button>
